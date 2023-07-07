@@ -1,0 +1,50 @@
+//EXECUTE PROCEDURE FILE FIRST
+//FILE NAME NEED NOT BE SAME AS PROCEDURE NAME
+//DON'T WRITE PROCEDURE AND MAIN BLOCK IN THE SAME FILE ('CAN' DO IT LIKE SHOWN FOR FUNCTION BUT DON'T FOR THIS LAB)
+
+//command: show errors (to show the errors)
+
+//PROCEDURE:
+
+set serveroutput on;
+create or replace 
+procedure pr(nam varchar) is
+pl_n varchar(20);
+begin
+	pl_n:=nam;
+	dbms_output.put_line('Good Day to You, '||pl_n);
+end;
+ /
+
+//IN SEPARATE .SQL FILE: 
+
+
+set serveroutput on
+declare
+begin
+	pr('&Name');    //or use call command
+end;
+/
+
+
+
+
+
+
+//FUNCTION:  (IF WRITING IN THE SAME FILE)
+
+set serveroutput on
+create or replace 
+function count_book(bk_subject varchar) 
+return number as
+	bk_count number;
+
+begin
+	select count(*) into bk_count from book where subject=bk_subject;
+	return bk_count; 
+end;
+
+begin
+	dbms_output.put_line()
+end;
+ /

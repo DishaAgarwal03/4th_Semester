@@ -1,0 +1,269 @@
+create table StudentTable(
+RollNo number(3),
+GPA number(2,1));
+
+desc StudentTable;
+
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ROLLNO                                             NUMBER(3)
+ GPA                                                NUMBER(2,1)
+
+
+
+insert into StudentTable values(1,5.8);
+insert into StudentTable values(2,6.5);
+insert into StudentTable values(3,3.4);
+insert into StudentTable values(4,7.8);
+insert into StudentTable values(5,9.5);
+
+
+
+select * from StudentTable;
+
+    ROLLNO        GPA
+---------- ----------
+         1        5.8
+         2        6.5
+         3        3.4
+         4        7.8
+         5        9.5
+
+***************************************************************************
+1)
+set serveroutput on
+declare
+stgpa StudentTable.gpa%TYPE;
+begin
+	select gpa
+	into stgpa
+	from StudentTable
+	where rollno='&roll';
+	dbms_output.put_line('GPA of given student is '||stgpa);
+end;
+/
+
+@ "C:\Users\Student\Desktop\210905412_DBS\week6_PSQl\one.sql"
+Enter value for roll: 2
+old   7:        where rollno='&roll';
+new   7:        where rollno='2';
+GPA of given student is 6.5
+
+PL/SQL procedure successfully completed.
+
+
+***************************************************************************
+2)
+set serveroutput on
+declare
+stgpa StudentTable.gpa%TYPE;
+g varchar(2);
+begin
+	select gpa
+	into stgpa
+	from StudentTable
+	where rollno='&roll';
+	
+	if stgpa>=0 and stgpa<4 then
+		g:='F';
+	elsif stgpa<5 then
+		g:='E';
+	elsif stgpa<6 then
+		g:='D';
+	elsif stgpa<7 then
+		g:='C';
+	elsif stgpa<8 then
+		g:='B';
+	elsif stgpa<9 then
+		g:='A';
+	else
+		g:='A+';
+	end if;
+
+	dbms_output.put_line('Grade: '||g);
+end;
+/
+
+
+@ "C:\Users\Student\Desktop\210905412_DBS\week6_PSQl\two.sql"
+Enter value for roll: 5
+old   8:        where rollno='&roll';
+new   8:        where rollno='5';
+Grade: A+
+
+PL/SQL procedure successfully completed.
+
+***************************************************************************
+3)
+set serveroutput on
+declare
+doi date;
+dor date;
+d number(3);
+f number(2);
+begin
+	doi:='&date_of_issue';
+	dor:='&date_of_return';
+	d:=dor-doi;
+	
+	if d<=7 then
+		f:=0;
+	elsif d<=15 then
+		f:=d-7;
+	elsif d<=30 then
+		f:=8+(d-15)*2;
+	else
+		f:=43;
+	end if;
+	dbms_output.put_line('Fine: '||f);
+end;
+/
+
+ @ "C:\Users\Student\Desktop\210905412_DBS\week6_PSQl\three.sql"
+Enter value for date_of_issue: 23-sep-2003
+old   7:        doi:='&date_of_issue';
+new   7:        doi:='23-sep-2003';
+Enter value for date_of_return: 20-oct-2003
+old   8:        dor:='&date_of_return';
+new   8:        dor:='20-oct-2003';
+Fine: 32
+
+***************************************************************************
+4)
+set serveroutput on
+declare
+stgpa StudentTable.gpa%TYPE;
+roll number(1);
+g varchar(2);
+begin
+	FOR roll IN 1..5 LOOP
+	select gpa
+	into stgpa
+	from StudentTable
+	where rollno=roll;
+	
+	if stgpa>=0 and stgpa<4 then
+		g:='F';
+	elsif stgpa<5 then
+		g:='E';
+	elsif stgpa<6 then
+		g:='D';
+	elsif stgpa<7 then
+		g:='C';
+	elsif stgpa<8 then
+		g:='B';
+	elsif stgpa<9 then
+		g:='A';
+	else
+		g:='A+';
+	end if;
+
+	dbms_output.put_line('Roll: '||roll||'   GPA: '||stgpa||'   Grade: '||g);
+	dbms_output.new_line;
+	END LOOP;
+	
+end;
+/
+
+@ "C:\Users\Student\Desktop\210905412_DBS\week6_PSQl\four.sql"
+Roll: 1   GPA: 5.8   Grade: D
+Roll: 2   GPA: 6.5   Grade: C
+Roll: 3   GPA: 3.4   Grade: F
+Roll: 4   GPA: 7.8   Grade: B
+Roll: 5   GPA: 9.5   Grade: A+
+
+PL/SQL procedure successfully completed.
+
+***************************************************************************
+5)
+ALTER TABLE StudentTable ADD LetterGrade VARCHAR2(2);
+
+set serveroutput on
+declare
+stgpa StudentTable.gpa%TYPE;
+N number;
+I number;
+g varchar(2);
+begin
+    select count(*) into N from StudentTable;
+    I := 1;
+    WHILE I <= N
+    LOOP
+        select gpa
+	  into stgpa
+	  from StudentTable
+	  where rollno=I;
+
+        if stgpa>=0 and stgpa<4 then
+		  g:='F';
+	  elsif stgpa<5 then
+		  g:='E';
+	  elsif stgpa<6 then
+		  g:='D';
+	  elsif stgpa<7 then
+		  g:='C';
+	  elsif stgpa<8 then
+		  g:='B';
+	  elsif stgpa<9 then
+		  g:='A';
+	  else
+		  g:='A+';
+	  end if;
+
+	  UPDATE StudentTable SET LetterGrade = g WHERE RollNo = I;
+
+        I := I + 1;
+    END LOOP;
+END;
+/
+
+ @ "C:\Users\Student\Desktop\210905412_DBS\week6_PSQl\five.sql"
+
+PL/SQL procedure successfully completed.
+
+
+
+
+select * from StudentTABLE;
+
+    ROLLNO        GPA LE
+---------- ---------- --
+         1        5.8 D
+         2        6.5 C
+         3        3.4 F
+         4        7.8 B
+         5        9.5 A+
+
+***************************************************************************
+6)
+set serveroutput on
+declare
+stgpa StudentTable.gpa%TYPE;
+maxgpa number(2,1);
+maxroll number(3);
+begin
+	maxroll:=1;
+	FOR roll IN 1..5 LOOP
+	select gpa
+	into stgpa
+	from StudentTable
+	where rollno=roll;
+	
+	if roll=1 then
+		maxgpa:=stgpa;	
+	elsif maxgpa<stgpa then
+		maxgpa:=stgpa;
+		maxroll:=roll;
+	end if;
+	END LOOP;
+	dbms_output.put_line('Roll: '||maxroll||'  Max GPA: '||maxgpa);
+end;
+/
+
+ @ "C:\Users\Student\Desktop\210905412_DBS\week6_PSQl\six.sql"
+Roll: 5  Max GPA: 9.5
+
+***************************************************************************
+
+
+

@@ -1,0 +1,15 @@
+//AFTER INSERTION of every new record, place the issn of the NEW record in another table 
+
+create or replace trigger t
+after                                 //timeline
+	insert                          //DML operations //may write 'INSERT or UPDATE or DELETE'
+on book1
+for each row
+begin
+	insert into book_inventory values(:NEW.issn, current_date);  //do what when trigger is activated
+end;
+/
+
+
+//cannot execute a trigger manually. can only create and activate it . it'll execute on its own
+//can alter or drop trigger
