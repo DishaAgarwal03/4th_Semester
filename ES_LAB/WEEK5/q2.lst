@@ -1,0 +1,162 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET,DATA,READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         
+    4 00000000         __Vectors
+    5 00000000 10001000        DCD              0x10001000
+    6 00000004 00000000        DCD              Reset_Handler
+    7 00000008                 ALIGN
+    8 00000008                 AREA             mycode,CODE,READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 480C            ldr              r0,=input
+   14 00000002 490D            ldr              r1,=result
+   15 00000004 6802            ldr              r2,[r0]
+   16 00000006 F000 F802       bl               fact
+   17 0000000A 600A            str              r2,[r1]
+   18 0000000C         here
+   19 0000000C E7FE            b                here
+   20 0000000E         fact
+   21 0000000E B508            push             {r3,lr}
+   22 00000010 4613            mov              r3,r2
+   23 00000012 2A00            cmp              r2,#0
+   24 00000014 D102            bne              down
+   25 00000016 F04F 0201       mov              r2,#1
+   26 0000001A E006            b                down1
+   27 0000001C         down
+   28 0000001C F1A2 0201       sub              r2,#1
+   29 00000020 F7FF FFF5       bl               fact
+   30 00000024 461C            mov              r4,r3
+   31 00000026 FB02 F204       mul              r2,r4
+   32 0000002A         down1
+   33 0000002A E8BD 4008       pop              {r3,lr}
+   34 0000002E 4770            bx               lr
+   35 00000030 00000003 
+                       input   dcd              0x3
+   36 00000034 00000000 
+              00000000         area             mydata,data,readwrite
+   37 00000000 00000000 
+                       result  dcd              0
+   38 00000004                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=.\q2.d -
+o.\q2.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NX
+P\LPC17xx --predefine="__EVAL SETA 1" --list=.\q2.lst q2.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file q2.s
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 4 in file q2.s
+   Uses
+      At line 2 in file q2.s
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file q2.s
+   Uses
+      At line 6 in file q2.s
+      At line 10 in file q2.s
+
+down 0000001C
+
+Symbol: down
+   Definitions
+      At line 27 in file q2.s
+   Uses
+      At line 24 in file q2.s
+Comment: down used once
+down1 0000002A
+
+Symbol: down1
+   Definitions
+      At line 32 in file q2.s
+   Uses
+      At line 26 in file q2.s
+Comment: down1 used once
+fact 0000000E
+
+Symbol: fact
+   Definitions
+      At line 20 in file q2.s
+   Uses
+      At line 16 in file q2.s
+      At line 29 in file q2.s
+
+here 0000000C
+
+Symbol: here
+   Definitions
+      At line 18 in file q2.s
+   Uses
+      At line 19 in file q2.s
+Comment: here used once
+input 00000030
+
+Symbol: input
+   Definitions
+      At line 35 in file q2.s
+   Uses
+      At line 13 in file q2.s
+Comment: input used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file q2.s
+   Uses
+      None
+Comment: mycode unused
+7 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 36 in file q2.s
+   Uses
+      None
+Comment: mydata unused
+result 00000000
+
+Symbol: result
+   Definitions
+      At line 37 in file q2.s
+   Uses
+      At line 14 in file q2.s
+Comment: result used once
+2 symbols
+344 symbols in table
